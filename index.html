@@ -6,23 +6,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="./assets/css/reset.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="./assets/css/style.css">
   <title>Train Scheduler</title>
 </head>
 
 <body>
 
-  <div class="header">
-    <img class="logo" src="./assets/images/locomotive.png" alt="locomotive">
-    <h1>Train Scheduler</h1>
+  <nav>
+    <div class="nav-wrapper">
+      <div class="title-container">
+        <img class="logo" src="./assets/images/locomotive.png" alt="locomotive">
+        <a href="#" id="logo-title" class="brand-logo">Train Scheduler</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col s8">
+        <div class="section schedule-conatiner">
+        </div>
+      </div>
+      <div class="col s4">
+        <div class="section add-container">
+          <h5 class="blue white-text center-align section-title">Add a Train</h5>
+          <div class="col s12">
+            <form>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="train-name" type="text" class="validate">
+                  <label for="train-name">Train Name</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="destination" type="text" class="validate">
+                  <label for="destination">Destination</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="first-time" type="text" class="validate">
+                  <label for="first-time">First Time (military time)</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="frequency" type="number" class="validate">
+                  <label for="frequency">Frequency (min)</label>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  
-
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"
-    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
   <script src="./assets/javascript/app.js"></script>
 </body>

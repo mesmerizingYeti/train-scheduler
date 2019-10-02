@@ -36,3 +36,8 @@ db.collection('trains')
         </tr>`
     })
   })
+
+document.querySelector('#add-btn').addEventListener('click', e => {
+  e.preventDefault()
+  
+})

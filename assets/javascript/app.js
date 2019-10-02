@@ -69,3 +69,10 @@ document.querySelector('#add-btn').addEventListener('click', e => {
     }
   }
 })
+
+const timer = setInterval(_ => {
+  db.collection('trains')
+    .get()
+    .then(({ docs }) => updateTrainSchedule(docs))
+    .catch(e => console.error(e))
+}, 30000)

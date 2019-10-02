@@ -43,7 +43,9 @@ nav {
 }
 
 .input-field input[type=text]:not(.browser-default):focus:not([readonly]),
-.input-field input[type=number]:not(.browser-default):focus:not([readonly]) {
+.input-field input[type=number]:not(.browser-default):focus:not([readonly]),
+input.valid[type=text]:not(.browser-default),
+input.valid[type=number]:not(.browser-default) {
   border-bottom: 1px solid #161925;
   box-shadow: 0 1px 0 0 #161925;
 }

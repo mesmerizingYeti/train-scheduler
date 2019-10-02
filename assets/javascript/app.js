@@ -19,25 +19,53 @@ const nextArrival = (firstStop, rate) => {
   return moment(now + rate * 60 - (now - firstStop) % (rate * 60), 'X').format('HH:mm')
 }
 
-db.collection('trains')
-  .get()
-  .then(({ docs }) => {
-    docs.forEach(train => {
-      console.log(train.data())
-      let { name, destination, frequency, firstStop} = train.data()
-      let minutesAway = frequency - Math.floor(((moment().format('X') - firstStop) % (frequency * 60)) / 60)
-      document.querySelector('#train-table').innerHTML += `
-        <tr>
-          <td>${name}</td>
-          <td>${destination}</td>
-          <td>${frequency}</td>
-          <td>${nextArrival(firstStop, frequency)}</td>
-          <td>${minutesAway}</td>
-        </tr>`
-    })
+const updateTrainSchedule = arr => {
+  document.querySelector('#train-table').innerHTML = ''
+  arr.forEach(train => {
+    console.log(train.data())
+    const { name, destination, frequency, firstStop} = train.data()
+    const minutesAway = frequency - Math.floor(((moment().format('X') - firstStop) % (frequency * 60)) / 60)
+    document.querySelector('#train-table').innerHTML += `
+      <tr>
+        <td>${name}</td>
+        <td>${destination}</td>
+        <td>${frequency}</td>
+        <td>${nextArrival(firstStop, frequency)}</td>
+        <td>${minutesAway}</td>
+      </tr>`
   })
+}
+
+const isMilitaryTime = str => /([01]\d|2[0-3]):[0-5]\d/.test(str)
+
+db.collection('trains')
+  .onSnapshot(({ docs }) => updateTrainSchedule(docs))
 
 document.querySelector('#add-btn').addEventListener('click', e => {
   e.preventDefault()
-  
+  let trainName = document.querySelector('#train-name').value,
+      destination = document.querySelector('#destination').value,
+      firstTime = document.querySelector('#first-time').value,
+      frequency = document.querySelector('#frequency').value
+
+  if (trainName && destination && isMilitaryTime(firstTime) && frequency > 0) {
+    const firstStop = JSON.parse(moment(`${moment().format("MM/DD/YYYY")} ${firstTime}`, 'MM/DD/YYYY HH:mm').format('X'))
+    db.collection('trains')
+      .doc(trainName)
+      .set({
+        name: trainName,
+        destination: destination,
+        frequency: frequency,
+        firstStop: firstStop
+      })
+    const inputs = document.getElementsByTagName('input')
+    for (let i = 0; i < inputs.length; i++) {
+      inputs[i].value = ''
+      inputs[i].classList.remove('valid')
+    }
+    const labels = document.getElementsByTagName('label')
+    for (let i = 0; i < labels.length; i++) {
+      labels[i].classList.remove('active')
+    }
+  }
 })

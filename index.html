@@ -24,12 +24,29 @@
 
   <div class="container">
     <div class="row">
-      <div class="col s8">
-        <div class="section schedule-conatiner">
+      <div class="col s12">
+        <div id="schedule-container" class="col s12 section">
+          <h5 class="blue white-text center-align section-title">Current Train Schedule</h5>
+          <table class="striped">
+            <thead>
+                <tr>
+                    <th><b>Train Name</b></th>
+                    <th><b>Destination</b></th>
+                    <th><b>Frequency (min)</b></th>
+                    <th><b>Next Arrival</b></th>
+                    <th><b>Minutes Away</b></th>
+                </tr>
+            </thead>
+            <tbody id="train-table">
+
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="col s4">
-        <div class="section add-container">
+    </div>
+    <div class="row">
+      <div class="col s12">
+        <div id="add-container" class="col s12 section">
           <h5 class="blue white-text center-align section-title">Add a Train</h5>
           <div class="col s12">
             <form>
@@ -48,13 +65,18 @@
               <div class="row">
                 <div class="input-field col s12">
                   <input id="first-time" type="text" class="validate">
-                  <label for="first-time">First Time (military time)</label>
+                  <label for="first-time">First Stop (military time)</label>
                 </div>
               </div>
               <div class="row">
                 <div class="input-field col s12">
                   <input id="frequency" type="number" class="validate">
                   <label for="frequency">Frequency (min)</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col s12">
+                  <button id="add-btn" class="btn waves-effect waves-light blue">Add Train</button>
                 </div>
               </div>
             </form>
@@ -64,6 +86,10 @@
     </div>
   </div>
 
+
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-firestore.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
   <script src="./assets/javascript/app.js"></script>

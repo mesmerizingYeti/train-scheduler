@@ -13,18 +13,25 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore()
-
+// Return next arrival of train in military time format
 const nextArrival = (firstStop, rate) => {
   const now = JSON.parse(moment().format('X'))
-  return moment(now + rate * 60 - (now - firstStop) % (rate * 60), 'X').format('HH:mm')
+  // Time, in seconds, since last arrival
+  const lastArrival = (now - firstStop) % (rate * 60)
+  // Find next arrival by removing lastArrival and adding rate of train
+  return moment(now + rate * 60 - lastArrival, 'X').format('HH:mm')
 }
 
-const updateTrainSchedule = arr => {
+// Update train schedule on html
+const updateTrainSchedule = trains => {
+  // Clear schedule
   document.querySelector('#train-table').innerHTML = ''
-  arr.forEach(train => {
-    console.log(train.data())
+  trains.forEach(train => {
+    // Grab all data from train
     const { name, destination, frequency, firstStop} = train.data()
+    // Compute how long till train arrives
     const minutesAway = frequency - Math.floor(((moment().format('X') - firstStop) % (frequency * 60)) / 60)
+    // Add train to schedule
     document.querySelector('#train-table').innerHTML += `
       <tr>
         <td>${name}</td>
@@ -36,20 +43,27 @@ const updateTrainSchedule = arr => {
   })
 }
 
+// Chcek if str contains military time
 const isMilitaryTime = str => /([01]\d|2[0-3]):[0-5]\d/.test(str)
 
+// Update schedule if trains is modified
 db.collection('trains')
   .onSnapshot(({ docs }) => updateTrainSchedule(docs))
 
+// Add train to schedule
 document.querySelector('#add-btn').addEventListener('click', e => {
+  // Prevent form from reloading page
   e.preventDefault()
+  // Grab all input from form
   let trainName = document.querySelector('#train-name').value,
       destination = document.querySelector('#destination').value,
       firstTime = document.querySelector('#first-time').value,
       frequency = document.querySelector('#frequency').value
-
+  // Check if there exists input and if it is valid
   if (trainName && destination && isMilitaryTime(firstTime) && frequency > 0) {
+    // Set firstStop to be today at firstTime
     const firstStop = JSON.parse(moment(`${moment().format("MM/DD/YYYY")} ${firstTime}`, 'MM/DD/YYYY HH:mm').format('X'))
+    // Add to database
     db.collection('trains')
       .doc(trainName)
       .set({
@@ -58,11 +72,13 @@ document.querySelector('#add-btn').addEventListener('click', e => {
         frequency: frequency,
         firstStop: firstStop
       })
+    // Update inputs to empty
     const inputs = document.getElementsByTagName('input')
     for (let i = 0; i < inputs.length; i++) {
       inputs[i].value = ''
       inputs[i].classList.remove('valid')
     }
+    // Update input labels
     const labels = document.getElementsByTagName('label')
     for (let i = 0; i < labels.length; i++) {
       labels[i].classList.remove('active')
@@ -70,6 +86,7 @@ document.querySelector('#add-btn').addEventListener('click', e => {
   }
 })
 
+// Update schedule every 30 seconds
 const timer = setInterval(_ => {
   db.collection('trains')
     .get()
